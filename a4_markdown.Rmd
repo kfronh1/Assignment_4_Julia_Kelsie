@@ -1,0 +1,54 @@
+---
+title: "Assignment 4"
+author: "Julia Dagum and Kelsie Fronheiser"
+date: "November 12, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Install packages and read in data
+
+library(tidyverse)
+library(janitor)
+lobster_data <- read.csv("lobster_abundance_sbc_lter.csv", 
+                         na = -99999) %>% 
+  clean_names()
+
+# Wrangle data for graph 1 (annual count for each site)
+lobster_abundance <- lobster_data %>% 
+  select(year, site, count) %>% 
+  group_by(site, year) %>% 
+  summarize(annual_count = sum(count))
+
+# Graph 1
+ggplot(data = lobster_abundance, aes(x = year, y = annual_count, fill = site)) +
+  geom_col(position = "dodge")
+
+```
+
+```{r}
+
+# Wrangle data for graph 2 - size distribution in 2012 and 2018
+
+lobster_size <- lobster_data %>% 
+  select(year, site, size_mm, count) %>% 
+  filter(year %in% c("2012", "2018"))%>%
+  tidyr::uncount(count)
+
+# Make graph 2
+#  
+# violin <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.character(year))) +
+#   geom_violin(position = "dodge") +
+#   coord_flip()
+# 
+# violin
+
+boxplot <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.character(year))) +
+  geom_boxplot(position = "dodge") +
+  coord_flip()
+
+boxplot
+```
+
