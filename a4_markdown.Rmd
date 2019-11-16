@@ -59,13 +59,13 @@ lobster_size <- lobster_data %>%
 #   geom_violin(position = "dodge") +
 #   coord_flip()
 # 
-# violin
-
-boxplot <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.character(year))) +
-  geom_boxplot(position = "dodge") +
-  coord_flip()
-
-boxplot
+# # violin
+# 
+# boxplot <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.character(year))) +
+#   geom_boxplot(position = "dodge") +
+#   coord_flip()
+# 
+# boxplot
 
 density <- ggplot(data = lobster_size, aes(x = size_mm, group = as.character(year), fill = as.character(year))) +
     geom_density(adjust=1.5, alpha=.4) +
