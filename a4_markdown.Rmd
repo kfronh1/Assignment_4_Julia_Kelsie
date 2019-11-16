@@ -1,7 +1,6 @@
 ---
 title: "Assignment 4"
 author: "Julia Dagum and Kelsie Fronheiser"
-date: "November 12, 2019"
 output: html_document
 ---
 
@@ -74,13 +73,30 @@ lobster_size <- lobster_data %>%
 #   geom_violin(position = "dodge") +
 #   coord_flip()
 # 
-# violin
+# # violin
+# 
+# boxplot <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.character(year))) +
+#   geom_boxplot(position = "dodge") +
+#   coord_flip()
+# 
+# boxplot
 
-boxplot <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.character(year))) +
-  geom_boxplot(position = "dodge") +
-  coord_flip()
+density <- ggplot(data = lobster_size, aes(x = size_mm, group = as.character(year), fill = as.character(year))) +
+    geom_density(adjust=1.5, alpha=.4) +
+    facet_wrap(~site_name) + 
+  theme_bw() +
+  labs(x = "Size (mm)", 
+       y = "Density", 
+       fill = "Year", 
+       title = "Lobster Size in 2012 and 2018 at Five Locations in Santa Barbara County") 
 
-boxplot
+
+  # theme(axis.text.y = element_blank(),
+  #       axis.ticks.y = element_blank())
+
+
+
+density
 
 density <- ggplot(data = lobster_size, aes(x = size_mm, group = as.character(year), fill = as.character(year))) +
     geom_density(adjust=1.5, alpha=.4) +
