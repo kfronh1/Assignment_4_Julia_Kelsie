@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 library(tidyverse)
 library(janitor)
+
 lobster_data <- read.csv("lobster_abundance_sbc_lter.csv", 
                          na = -99999) %>% 
   clean_names()
@@ -20,20 +21,27 @@ lobster_data <- read.csv("lobster_abundance_sbc_lter.csv",
 lobster_abundance <- lobster_data %>% 
   select(year, site, count) %>% 
   group_by(site, year) %>% 
-  summarize(annual_count = sum(count))
+  summarize(annual_count = sum(count)) %>% 
+  mutate(site_names = case_when(
+    site == "AQUE" ~ "Arroyo Quemado",
+    site == "CARP" ~ "Carpinteria",
+    site == "IVEE" ~ "Isla Vista",
+    site == "NAPL" ~ "Naples",
+    site == "MOHK" ~ "Mohawk"))
 
 # Graph 1
 
-ggplot(data = lobster_abundance, aes(x = year, y = annual_count, fill = site)) +
+ggplot(data = lobster_abundance, aes(x = year, y = annual_count, fill = site_names)) +
   geom_col(position = "dodge") +
   theme_minimal() +
   labs(title ="Annual Lobster Abundance by Marine Site Location",
        x = "Year",
        y = "Lobster Count") +
   scale_x_continuous(breaks = seq(2012, 2018, 2)) +
-  facet_wrap(~site) +
+  facet_wrap(~site_names, labeller = ) +
    theme(panel.grid.minor.x = element_blank(), 
         panel.grid.minor.y = element_blank())
+  
 
 ```
 
