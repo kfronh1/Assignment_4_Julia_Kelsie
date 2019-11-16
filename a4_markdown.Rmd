@@ -44,7 +44,14 @@ ggplot(data = lobster_abundance, aes(x = year, y = annual_count, fill = site)) +
 lobster_size <- lobster_data %>% 
   select(year, site, size_mm, count) %>% 
   filter(year %in% c("2012", "2018"))%>%
-  tidyr::uncount(count)
+  tidyr::uncount(count) %>%
+  dplyr::mutate(
+    site_name = dplyr::case_when(
+      site == "IVEE" ~ "Isla Vista", 
+      site == "AQUE" ~ "Arroyo Quemado", 
+      site == "CARP" ~ "Carpenteria", 
+      site == "MOHK" ~ "Mohawk", 
+      site == "NAPL" ~ "Naples"))
 
 # Make graph 2
 #  
@@ -59,5 +66,20 @@ boxplot <- ggplot(data = lobster_size, aes(x = site, y = size_mm, fill = as.char
   coord_flip()
 
 boxplot
+
+density <- ggplot(data = lobster_size, aes(x = size_mm, group = as.character(year), fill = as.character(year))) +
+    geom_density(adjust=1.5, alpha=.4) +
+    facet_wrap(~site_name) + 
+  theme_bw() +
+  labs(x = "Size (mm)", 
+       y = "Density") 
+
+  # theme(axis.text.y = element_blank(),
+  #       axis.ticks.y = element_blank())
+
+
+
+density
+
 ```
 
